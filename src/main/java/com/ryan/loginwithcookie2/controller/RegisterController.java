@@ -1,8 +1,10 @@
 package com.ryan.loginwithcookie2.controller;
 
+import com.ryan.loginwithcookie2.model.User;
 import com.ryan.loginwithcookie2.service.UserService;
 import com.ryan.loginwithcookie2.service.impl.UserServiceImpl;
 import com.ryan.loginwithcookie2.util.Constant;
+import com.ryan.loginwithcookie2.util.EmailUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -48,25 +50,33 @@ public class RegisterController extends HttpServlet {
             return;
         }
 
-        if (service.checkExistEmail(email.trim())) {
-            req.setAttribute("alert", "Email đã tồn tại!");
+        User existU = service.get(username.trim());
+        if (existU != null && (existU.getStatus() == null || existU.getStatus() == 1)) {
+            req.setAttribute("alert", "Tài khoản đã tồn tại và đã được kích hoạt!");
             req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
             return;
         }
 
-        if (service.checkExistUsername(username.trim())) {
-            req.setAttribute("alert", "Tài khoản đã tồn tại!");
+        User existE = service.getByEmail(email.trim());
+        if (existE != null && (existE.getStatus() == null || existE.getStatus() == 1)) {
+            req.setAttribute("alert", "Email này đã được đăng ký!");
             req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
             return;
         }
 
-        boolean isSuccess = service.register(username.trim(), password.trim(), email.trim(), fullname != null ? fullname.trim() : "", phone != null ? phone.trim() : "");
+        String otp = EmailUtil.generateOtp();
+        boolean isSuccess = service.registerWithOtp(username.trim(), password.trim(), email.trim(),
+                fullname != null ? fullname.trim() : "",
+                phone != null ? phone.trim() : "",
+                otp);
+
         if (isSuccess) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            HttpSession session = req.getSession(true);
+            session.setAttribute("verifyEmail", email.trim());
+            resp.sendRedirect(req.getContextPath() + "/verify-otp?email=" + email.trim());
         } else {
             req.setAttribute("alert", "Hệ thống gặp lỗi, đăng ký thất bại!");
             req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
         }
     }
 }
-

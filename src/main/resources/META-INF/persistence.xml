@@ -3,11 +3,12 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 
-    <persistence-unit name="ShoppingServiceMVC">
+    <persistence-unit name="LoginWithCookieDB">
         <class>com.ryan.loginwithcookie2.model.User</class>
+        <class>com.ryan.loginwithcookie2.model.Video</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url"
-                      value="jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=ShoppingServiceMVC;integratedSecurity=true;" />
+                      value="jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;databaseName=LoginWithCookieDB;integratedSecurity=true;" />
             <property name="jakarta.persistence.jdbc.driver"
                       value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
             <property name="jakarta.persistence.jdbc.user" value="sa" />

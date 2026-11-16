@@ -10,6 +10,7 @@ public interface IUserDao {
     void delete(int id) throws Exception;
     User findById(int id);
     User findByUsername(String username) throws Exception;
+    User findByEmail(String email);
     List<User> findAll();
     List<User> findAll(int page, int pagesize);
     List<User> searchByName(String keyword);

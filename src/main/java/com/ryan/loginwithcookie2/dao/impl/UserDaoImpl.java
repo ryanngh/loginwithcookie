@@ -98,6 +98,26 @@ public class UserDaoImpl implements IUserDao, UserDao {
     }
 
     @Override
+    public User findByEmail(String email) {
+        EntityManager enma = JpaConfig.getEntityManager();
+        String jpql = "SELECT u FROM User u WHERE u.email = :email";
+        try {
+            TypedQuery<User> query = enma.createQuery(jpql, User.class);
+            query.setParameter("email", email);
+            List<User> list = query.getResultList();
+            if (list == null || list.isEmpty()) {
+                return null;
+            }
+            return list.get(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            enma.close();
+        }
+    }
+
+    @Override
     public List<User> findAll() {
         EntityManager enma = JpaConfig.getEntityManager();
         try {

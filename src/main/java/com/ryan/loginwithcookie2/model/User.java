@@ -1,15 +1,20 @@
 package com.ryan.loginwithcookie2.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "[User]")
@@ -46,6 +51,18 @@ public class User implements Serializable {
     @Column(name = "createdDate")
     private Date createdDate;
 
+    @Column(name = "status")
+    private Integer status = 1; // 1: Active, 0: Pending activation
+
+    @Column(name = "otp")
+    private String otp;
+
+    @Column(name = "otpExpiry")
+    private java.util.Date otpExpiry;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Video> videos = new ArrayList<>();
+
     public User() {
     }
 
@@ -58,6 +75,7 @@ public class User implements Serializable {
         this.roleid = roleid;
         this.phone = phone;
         this.createdDate = createdDate;
+        this.status = 1;
     }
 
     public User(int id, String email, String userName, String fullName, String passWord, String avatar, int roleid, String phone, Date createdDate) {
@@ -70,6 +88,7 @@ public class User implements Serializable {
         this.roleid = roleid;
         this.phone = phone;
         this.createdDate = createdDate;
+        this.status = 1;
     }
 
     public int getId() {
@@ -142,5 +161,37 @@ public class User implements Serializable {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public java.util.Date getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(java.util.Date otpExpiry) {
+        this.otpExpiry = otpExpiry;
+    }
+
+    public List<Video> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
     }
 }

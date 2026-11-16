@@ -21,6 +21,13 @@ public class LoginController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String msg = req.getParameter("msg");
+        if ("activated".equals(msg)) {
+            req.setAttribute("successMsg", "Kích hoạt tài khoản thành công! Vui lòng đăng nhập.");
+        } else if ("reset_success".equals(msg)) {
+            req.setAttribute("successMsg", "Đặt lại mật khẩu thành công! Vui lòng đăng nhập với mật khẩu mới.");
+        }
+
         // 1. Kiểm tra Login với Session
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("account") != null) {
@@ -35,7 +42,7 @@ public class LoginController extends HttpServlet {
                 if (Constant.COOKIE_REMEMBER.equals(cookie.getName())) {
                     String username = cookie.getValue();
                     User user = service.get(username);
-                    if (user != null) {
+                    if (user != null && (user.getStatus() == null || user.getStatus() == 1)) {
                         session = req.getSession(true);
                         session.setAttribute("account", user);
                         resp.sendRedirect(req.getContextPath() + "/waiting");
@@ -71,11 +78,19 @@ public class LoginController extends HttpServlet {
 
         User user = service.login(username.trim(), password.trim());
         if (user != null) {
+            // Kiểm tra trạng thái kích hoạt tài khoản
+            if (user.getStatus() != null && user.getStatus() == 0) {
+                req.setAttribute("alert", "Tài khoản chưa được kích hoạt qua mã OTP!");
+                req.setAttribute("unverifiedEmail", user.getEmail());
+                req.getRequestDispatcher(Constant.Path.LOGIN).forward(req, resp);
+                return;
+            }
+
             HttpSession session = req.getSession(true);
             session.setAttribute("account", user);
 
             if (isRememberMe) {
-                saveRememberMe(resp, username.trim());
+                saveRememberMe(resp, user.getUserName());
             }
 
             resp.sendRedirect(req.getContextPath() + "/waiting");
@@ -92,4 +107,3 @@ public class LoginController extends HttpServlet {
         response.addCookie(cookie);
     }
 }
-

@@ -17,6 +17,15 @@ public class LogoutController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processLogout(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processLogout(req, resp);
+    }
+
+    private void processLogout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         // 1. Hủy Session
         HttpSession session = req.getSession(false);
         if (session != null) {
@@ -34,4 +43,3 @@ public class LogoutController extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/login");
     }
 }
-

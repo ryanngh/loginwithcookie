@@ -13,16 +13,16 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .register-box {
-            max-width: 480px;
+            max-width: 460px;
             margin: 40px auto;
             background: #ffffff;
             padding: 35px 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
         .register-box h2 {
             font-weight: 700;
-            color: #333;
+            color: #212529;
             text-align: center;
             margin-bottom: 25px;
         }
@@ -33,65 +33,52 @@
 
     <div class="container">
         <div class="register-box">
-            <h2><i class="fa fa-user-plus text-success"></i> Tạo tài khoản mới</h2>
+            <h2>Tạo tài khoản</h2>
 
             <c:if test="${alert != null}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fa fa-exclamation-triangle"></i> ${alert}
+                    ${alert}
                 </div>
             </c:if>
 
             <form action="${pageContext.request.contextPath}/register" method="post">
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Tài khoản (Username) <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-user"></i></span>
-                        <input type="text" name="username" class="form-control" placeholder="Nhập tài khoản" required>
-                    </div>
+                    <label class="form-label fw-semibold">Tên tài khoản <span class="text-danger">*</span></label>
+                    <input type="text" name="username" class="form-control" placeholder="Tên đăng nhập" required autofocus>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Mật khẩu <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-lock"></i></span>
-                        <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu" required>
-                    </div>
+                    <label class="form-label fw-semibold">Mật khẩu <span class="text-danger">*</span></label>
+                    <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Họ và tên</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-id-card"></i></span>
-                        <input type="text" name="fullname" class="form-control" placeholder="Nhập họ và tên đầy đủ">
-                    </div>
+                    <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                    <input type="email" name="email" class="form-control" placeholder="example@gmail.com" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Email <span class="text-danger">*</span></label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-envelope"></i></span>
-                        <input type="email" name="email" class="form-control" placeholder="example@email.com" required>
-                    </div>
+                    <label class="form-label fw-semibold">Họ và tên</label>
+                    <input type="text" name="fullname" class="form-control" placeholder="Họ và tên đầy đủ">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label font-weight-bold">Số điện thoại</label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-phone"></i></span>
-                        <input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại">
-                    </div>
+                    <label class="form-label fw-semibold">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" placeholder="Số điện thoại">
                 </div>
 
-                <button type="submit" class="btn btn-success w-100 py-2">
-                    <i class="fa fa-check-circle"></i> Đăng ký
+                <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
+                    Đăng ký
                 </button>
 
-                <div class="mt-4 text-center">
-                    <span>Đã có tài khoản? </span>
-                    <a href="${pageContext.request.contextPath}/login" class="text-decoration-none font-weight-bold">Đăng nhập tại đây</a>
+                <div class="mt-4 text-center small">
+                    <span class="text-muted">Đã có tài khoản? </span>
+                    <a href="${pageContext.request.contextPath}/login" class="text-decoration-none fw-semibold">Đăng nhập</a>
                 </div>
             </form>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

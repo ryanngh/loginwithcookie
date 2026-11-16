@@ -26,17 +26,17 @@ public class JpaConfig {
     public static synchronized EntityManagerFactory getEntityManagerFactory() {
         if (factory == null || !factory.isOpen()) {
             try {
-                factory = Persistence.createEntityManagerFactory("ShoppingServiceMVC");
+                factory = Persistence.createEntityManagerFactory("LoginWithCookieDB");
                 EntityManager testEm = factory.createEntityManager();
                 testEm.close();
             } catch (Exception e1) {
                 try {
                     Map<String, Object> props = new HashMap<>();
                     props.put("jakarta.persistence.jdbc.url",
-                            "jdbc:sqlserver://localhost:1433;databaseName=ShoppingServiceMVC;encrypt=true;trustServerCertificate=true;");
+                            "jdbc:sqlserver://localhost:1433;databaseName=LoginWithCookieDB;encrypt=true;trustServerCertificate=true;");
                     props.put("jakarta.persistence.jdbc.user", "sa");
                     props.put("jakarta.persistence.jdbc.password", "1234@a$");
-                    factory = Persistence.createEntityManagerFactory("ShoppingServiceMVC", props);
+                    factory = Persistence.createEntityManagerFactory("LoginWithCookieDB", props);
                 } catch (Exception e2) {
                     throw new RuntimeException("Không thể kết nối CSDL qua JPA: " + e1.getMessage(), e1);
                 }
