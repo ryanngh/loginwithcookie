@@ -42,10 +42,37 @@ public class RegisterController extends HttpServlet {
         String fullname = req.getParameter("fullname");
         String phone = req.getParameter("phone");
 
-        if (username == null || username.trim().isEmpty() ||
-            password == null || password.trim().isEmpty() ||
-            email == null || email.trim().isEmpty()) {
-            req.setAttribute("alert", "Vui lòng nhập đầy đủ các trường bắt buộc!");
+        req.setAttribute("inputUsername", username);
+        req.setAttribute("inputEmail", email);
+        req.setAttribute("inputFullname", fullname);
+        req.setAttribute("inputPhone", phone);
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidUsername(username)) {
+            req.setAttribute("alert", "Tên tài khoản phải từ 3–50 ký tự, không chứa khoảng trắng hoặc ký tự đặc biệt.");
+            req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidPassword(password, 6)) {
+            req.setAttribute("alert", "Mật khẩu phải có ít nhất 6 ký tự.");
+            req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidEmail(email)) {
+            req.setAttribute("alert", "Địa chỉ email không hợp lệ.");
+            req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidLength(fullname, 100)) {
+            req.setAttribute("alert", "Họ và tên tối đa 100 ký tự.");
+            req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidPhone(phone)) {
+            req.setAttribute("alert", "Số điện thoại không hợp lệ (ví dụ: 0901234567).");
             req.getRequestDispatcher(Constant.Path.REGISTER).forward(req, resp);
             return;
         }

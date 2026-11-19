@@ -70,8 +70,11 @@ public class LoginController extends HttpServlet {
             isRememberMe = true;
         }
 
-        if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
-            req.setAttribute("alert", "Tài khoản hoặc mật khẩu không được rỗng");
+        req.setAttribute("inputUsername", username);
+
+        if (com.ryan.loginwithcookie2.util.ValidationUtil.isBlank(username) ||
+            com.ryan.loginwithcookie2.util.ValidationUtil.isBlank(password)) {
+            req.setAttribute("alert", "Vui lòng nhập đầy đủ tài khoản và mật khẩu.");
             req.getRequestDispatcher(Constant.Path.LOGIN).forward(req, resp);
             return;
         }

@@ -109,15 +109,61 @@ public class VideoManageController extends HttpServlet {
         }
 
         String path = req.getServletPath();
+        String videoIdStr = req.getParameter("videoId");
         String title = req.getParameter("title");
+        String posterUrl = req.getParameter("poster");
         String description = req.getParameter("description");
         String url = req.getParameter("url");
         boolean active = "1".equals(req.getParameter("active")) || "true".equalsIgnoreCase(req.getParameter("active")) || "on".equals(req.getParameter("active"));
 
+        Part posterPart = null;
+        Part videoPart = null;
+        try {
+            posterPart = req.getPart("posterFile");
+            videoPart = req.getPart("videoFile");
+        } catch (Exception ignored) {}
+
+        String validationError = null;
+        if (com.ryan.loginwithcookie2.util.ValidationUtil.isBlank(title) ||
+            !com.ryan.loginwithcookie2.util.ValidationUtil.isValidLength(title, 255)) {
+            validationError = "Tiêu đề video không được để trống và tối đa 255 ký tự.";
+        } else if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidLength(description, 4000)) {
+            validationError = "Mô tả video tối đa 4000 ký tự.";
+        } else if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidUrl(posterUrl)) {
+            validationError = "Đường dẫn ảnh bìa không hợp lệ (phải bắt đầu bằng http://, https:// hoặc /).";
+        } else if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidUrl(url)) {
+            validationError = "Đường dẫn video không hợp lệ (phải bắt đầu bằng http://, https:// hoặc /).";
+        } else if (posterPart != null && posterPart.getSize() > 0 &&
+                   !com.ryan.loginwithcookie2.util.ValidationUtil.isValidImagePart(posterPart)) {
+            validationError = "File ảnh bìa không hợp lệ (chỉ hỗ trợ JPG, PNG, GIF, WEBP).";
+        } else if (videoPart != null && videoPart.getSize() > 0 &&
+                   !com.ryan.loginwithcookie2.util.ValidationUtil.isValidVideoPart(videoPart)) {
+            validationError = "File video không hợp lệ (chỉ hỗ trợ MP4, WEBM, OGG, MOV).";
+        }
+
+        if (validationError != null) {
+            req.setAttribute("alert", validationError);
+            req.setAttribute("inputTitle", title);
+            req.setAttribute("inputPoster", posterUrl);
+            req.setAttribute("inputUrl", url);
+            req.setAttribute("inputDescription", description);
+            req.setAttribute("inputActive", active);
+            if (videoIdStr != null && !videoIdStr.isEmpty()) {
+                try {
+                    req.setAttribute("videoEdit", videoService.findById(Integer.parseInt(videoIdStr)));
+                } catch (Exception ignored) {}
+            }
+            List<Video> videos = (user.getRoleid() == 1)
+                    ? videoService.findAll()
+                    : videoService.findByUserId(user.getId(), 0, 100);
+            req.setAttribute("videos", videos);
+            req.getRequestDispatcher("/views/video-manage.jsp").forward(req, resp);
+            return;
+        }
+
         // Xử lý Multipart upload cho Poster (Ảnh)
         String posterPath = null;
         try {
-            Part posterPart = req.getPart("posterFile");
             if (posterPart != null && posterPart.getSize() > 0) {
                 String submittedFileName = Paths.get(posterPart.getSubmittedFileName()).getFileName().toString();
                 String ext = "";
@@ -138,7 +184,6 @@ public class VideoManageController extends HttpServlet {
 
         // Xử lý Multipart upload cho Video File (nếu người dùng upload file video trực tiếp)
         try {
-            Part videoPart = req.getPart("videoFile");
             if (videoPart != null && videoPart.getSize() > 0) {
                 String submittedFileName = Paths.get(videoPart.getSubmittedFileName()).getFileName().toString();
                 String ext = "";
@@ -160,14 +205,13 @@ public class VideoManageController extends HttpServlet {
         if ("/video/create".equals(path) || (req.getParameter("videoId") == null || req.getParameter("videoId").isEmpty())) {
             // Thêm mới Video (CREATE)
             if (posterPath == null || posterPath.isEmpty()) {
-                String posterUrl = req.getParameter("poster");
                 posterPath = (posterUrl != null && !posterUrl.trim().isEmpty()) ? posterUrl.trim() : "https://picsum.photos/seed/video/600/360";
             }
             if (url == null || url.trim().isEmpty()) {
                 url = "https://www.w3schools.com/html/mov_bbb.mp4";
             }
 
-            Video newVideo = new Video(title, posterPath, 0, description, active, url, user);
+            Video newVideo = new Video(title.trim(), posterPath, 0, description, active, url.trim(), user);
             videoService.insert(newVideo);
         } else {
             // Cập nhật Video (UPDATE)
@@ -175,16 +219,13 @@ public class VideoManageController extends HttpServlet {
                 int videoId = Integer.parseInt(req.getParameter("videoId"));
                 Video existing = videoService.findById(videoId);
                 if (existing != null) {
-                    existing.setTitle(title);
+                    existing.setTitle(title.trim());
                     existing.setDescription(description);
                     existing.setActive(active);
                     if (posterPath != null && !posterPath.isEmpty()) {
                         existing.setPoster(posterPath);
-                    } else {
-                        String posterUrl = req.getParameter("poster");
-                        if (posterUrl != null && !posterUrl.trim().isEmpty()) {
-                            existing.setPoster(posterUrl.trim());
-                        }
+                    } else if (posterUrl != null && !posterUrl.trim().isEmpty()) {
+                        existing.setPoster(posterUrl.trim());
                     }
                     if (url != null && !url.trim().isEmpty()) {
                         existing.setUrl(url.trim());

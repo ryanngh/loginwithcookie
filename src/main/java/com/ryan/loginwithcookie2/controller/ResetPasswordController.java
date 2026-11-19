@@ -42,16 +42,26 @@ public class ResetPasswordController extends HttpServlet {
 
         req.setAttribute("email", email);
 
-        if (email == null || email.trim().isEmpty() ||
-            otp == null || otp.trim().isEmpty() ||
-            newPassword == null || newPassword.trim().isEmpty()) {
-            req.setAttribute("alert", "Vui lòng nhập đầy đủ các thông tin!");
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidEmail(email)) {
+            req.setAttribute("alert", "Địa chỉ email không hợp lệ.");
+            req.getRequestDispatcher("/views/reset-password.jsp").forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidOtp(otp)) {
+            req.setAttribute("alert", "Mã xác nhận phải gồm đúng 6 chữ số.");
+            req.getRequestDispatcher("/views/reset-password.jsp").forward(req, resp);
+            return;
+        }
+
+        if (!com.ryan.loginwithcookie2.util.ValidationUtil.isValidPassword(newPassword, 6)) {
+            req.setAttribute("alert", "Mật khẩu mới phải có ít nhất 6 ký tự.");
             req.getRequestDispatcher("/views/reset-password.jsp").forward(req, resp);
             return;
         }
 
         if (!newPassword.equals(confirmPassword)) {
-            req.setAttribute("alert", "Mật khẩu xác nhận không khớp!");
+            req.setAttribute("alert", "Mật khẩu xác nhận không khớp.");
             req.getRequestDispatcher("/views/reset-password.jsp").forward(req, resp);
             return;
         }
