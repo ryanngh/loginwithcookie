@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Quản lý Video</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .manage-card {
             background: white;
             border-radius: 12px;
@@ -28,16 +21,20 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container my-4">
-        <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-bold text-dark mb-0">Quản lý Video</h3>
             <a href="${pageContext.request.contextPath}/video" class="btn btn-outline-secondary btn-sm">
                 Xem danh sách video
             </a>
         </div>
+
+        <c:if test="${alert != null}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                ${alert}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </c:if>
 
         <div class="row g-4">
             <!-- Form Thêm / Sửa Video -->
@@ -52,7 +49,8 @@
 
                     <form action="${pageContext.request.contextPath}${videoEdit != null ? '/video/edit' : '/video/create'}"
                           method="post"
-                          enctype="multipart/form-data">
+                          enctype="multipart/form-data"
+                          class="needs-validation" novalidate>
 
                         <c:if test="${videoEdit != null}">
                             <input type="hidden" name="videoId" value="${videoEdit.videoId}">
@@ -61,8 +59,9 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Tiêu đề <span class="text-danger">*</span></label>
                             <input type="text" name="title" class="form-control"
-                                   value="${videoEdit != null ? videoEdit.title : ''}"
-                                   placeholder="Tiêu đề video" required>
+                                   value="${inputTitle != null ? inputTitle : (videoEdit != null ? videoEdit.title : '')}"
+                                   maxlength="255" placeholder="Tiêu đề video" required>
+                            <div class="invalid-feedback">Vui lòng nhập tiêu đề video (tối đa 255 ký tự).</div>
                         </div>
 
                         <div class="mb-3">
@@ -73,8 +72,9 @@
                         <div class="mb-3">
                             <label class="form-label text-muted small">Hoặc đường dẫn ảnh</label>
                             <input type="text" name="poster" class="form-control form-control-sm"
-                                   value="${videoEdit != null ? videoEdit.poster : ''}"
-                                   placeholder="https://...">
+                                   value="${inputPoster != null ? inputPoster : (videoEdit != null ? videoEdit.poster : '')}"
+                                   pattern="^(https?://|/).*$" placeholder="https://...">
+                            <div class="invalid-feedback">Đường dẫn phải bắt đầu bằng http://, https:// hoặc /.</div>
                         </div>
 
                         <div class="mb-3">
@@ -85,18 +85,21 @@
                         <div class="mb-3">
                             <label class="form-label text-muted small">Hoặc đường dẫn video</label>
                             <input type="text" name="url" class="form-control form-control-sm"
-                                   value="${videoEdit != null ? videoEdit.url : ''}"
-                                   placeholder="https://...">
+                                   value="${inputUrl != null ? inputUrl : (videoEdit != null ? videoEdit.url : '')}"
+                                   pattern="^(https?://|/).*$" placeholder="https://...">
+                            <div class="invalid-feedback">Đường dẫn phải bắt đầu bằng http://, https:// hoặc /.</div>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Mô tả</label>
-                            <textarea name="description" class="form-control" rows="3" placeholder="Mô tả video">${videoEdit != null ? videoEdit.description : ''}</textarea>
+                            <textarea name="description" class="form-control" rows="3" maxlength="4000"
+                                      placeholder="Mô tả video">${inputDescription != null ? inputDescription : (videoEdit != null ? videoEdit.description : '')}</textarea>
+                            <div class="invalid-feedback">Mô tả tối đa 4000 ký tự.</div>
                         </div>
 
                         <div class="mb-3 form-check">
                             <input type="checkbox" name="active" class="form-check-input" id="activeCheck" value="1"
-                                   ${videoEdit == null || videoEdit.active ? 'checked' : ''}>
+                                   ${(inputActive != null ? inputActive : (videoEdit == null || videoEdit.active)) ? 'checked' : ''}>
                             <label class="form-check-label text-muted" for="activeCheck">Công khai video</label>
                         </div>
 
@@ -186,7 +189,5 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

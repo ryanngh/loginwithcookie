@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Trang chủ</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .hero-banner {
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
@@ -71,8 +64,6 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container my-4">
         <!-- Banner chào mừng -->
         <div class="hero-banner shadow-sm">
@@ -93,6 +84,9 @@
                                     <i class="fa fa-user-circle"></i> ${sessionScope.account.fullName != null && !sessionScope.account.fullName.isEmpty() ? sessionScope.account.fullName : sessionScope.account.userName}
                                 </div>
                                 <div class="small text-muted mb-2">${sessionScope.account.email}</div>
+                                <a href="${pageContext.request.contextPath}/profile" class="btn btn-sm btn-outline-primary me-1">
+                                    Hồ sơ
+                                </a>
                                 <a href="${pageContext.request.contextPath}/video" class="btn btn-sm btn-primary me-1">
                                     Video của tôi
                                 </a>
@@ -166,7 +160,5 @@
             </c:otherwise>
         </c:choose>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

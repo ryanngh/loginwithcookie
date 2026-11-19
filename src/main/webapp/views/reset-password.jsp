@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Đặt lại mật khẩu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .reset-box {
             max-width: 420px;
             margin: 50px auto;
@@ -29,8 +22,6 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container">
         <div class="reset-box">
             <h3 class="fw-bold text-center mb-2">Đặt lại mật khẩu</h3>
@@ -42,25 +33,32 @@
                 </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/reset-password" method="post">
+            <form action="${pageContext.request.contextPath}/reset-password" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Email</label>
                     <input type="email" name="email" class="form-control" value="${email}" placeholder="Email của bạn" required>
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Mã xác nhận</label>
-                    <input type="text" name="otp" class="form-control otp-input" maxlength="6" placeholder="000000" required autofocus>
+                    <input type="text" name="otp" class="form-control otp-input"
+                           maxlength="6" pattern="^[0-9]{6}$" placeholder="000000" required autofocus>
+                    <div class="invalid-feedback">Mã xác nhận gồm đúng 6 chữ số.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Mật khẩu mới</label>
-                    <input type="password" name="newPassword" class="form-control" placeholder="Mật khẩu mới" required>
+                    <input type="password" name="newPassword" id="newPassword" class="form-control"
+                           minlength="6" placeholder="Ít nhất 6 ký tự" required>
+                    <div class="invalid-feedback">Mật khẩu mới phải có ít nhất 6 ký tự.</div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Nhập lại mật khẩu mới</label>
-                    <input type="password" name="confirmPassword" class="form-control" placeholder="Xác nhận mật khẩu mới" required>
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"
+                           minlength="6" placeholder="Xác nhận mật khẩu mới" required>
+                    <div class="invalid-feedback">Vui lòng nhập lại mật khẩu mới khớp với mật khẩu trên.</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
@@ -75,7 +73,5 @@
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

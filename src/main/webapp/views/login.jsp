@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Đăng nhập</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .login-box {
             max-width: 420px;
             margin: 60px auto;
@@ -29,8 +22,6 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container">
         <div class="login-box">
             <h2>Đăng nhập</h2>
@@ -54,10 +45,12 @@
                 </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/login" method="post">
+            <form action="${pageContext.request.contextPath}/login" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Tài khoản hoặc Email</label>
-                    <input type="text" name="username" class="form-control" placeholder="Tên đăng nhập hoặc email" required autofocus>
+                    <input type="text" name="username" class="form-control"
+                           value="${inputUsername}" placeholder="Tên đăng nhập hoặc email" required autofocus>
+                    <div class="invalid-feedback">Vui lòng nhập tài khoản hoặc email.</div>
                 </div>
 
                 <div class="mb-3">
@@ -68,6 +61,7 @@
                         </a>
                     </div>
                     <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+                    <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
                 </div>
 
                 <div class="mb-3 form-check">
@@ -86,7 +80,5 @@
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

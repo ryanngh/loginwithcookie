@@ -1,13 +1,18 @@
 package com.ryan.loginwithcookie2;
 
+import com.ryan.loginwithcookie2.config.SiteMeshFilter;
 import com.ryan.loginwithcookie2.controller.*;
+import jakarta.servlet.DispatcherType;
 import jakarta.servlet.MultipartConfigElement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+
+import java.util.EnumSet;
 
 @SpringBootApplication
 public class LoginWithCookie2Application extends SpringBootServletInitializer {
@@ -111,5 +116,15 @@ public class LoginWithCookie2Application extends SpringBootServletInitializer {
         ServletRegistrationBean<ManagerHomeController> reg = new ServletRegistrationBean<>(new ManagerHomeController(), "/manager/home");
         reg.setLoadOnStartup(1);
         return reg;
+    }
+
+    @Bean
+    public FilterRegistrationBean<SiteMeshFilter> siteMeshFilterRegistration() {
+        FilterRegistrationBean<SiteMeshFilter> filter = new FilterRegistrationBean<>();
+        filter.setFilter(new SiteMeshFilter());
+        filter.addUrlPatterns("/views/*");
+        filter.setDispatcherTypes(EnumSet.of(DispatcherType.FORWARD));
+        filter.setOrder(1);
+        return filter;
     }
 }

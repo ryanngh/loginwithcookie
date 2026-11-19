@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Quên mật khẩu</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .forgot-box {
             max-width: 420px;
             margin: 60px auto;
@@ -23,8 +16,6 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container">
         <div class="forgot-box">
             <h3 class="fw-bold text-center mb-2">Quên mật khẩu</h3>
@@ -36,10 +27,12 @@
                 </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/forgot-password" method="post">
+            <form action="${pageContext.request.contextPath}/forgot-password" method="post" class="needs-validation" novalidate>
                 <div class="mb-4">
                     <label class="form-label fw-semibold">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="example@gmail.com" required autofocus>
+                    <input type="email" name="email" class="form-control"
+                           value="${inputEmail}" placeholder="example@gmail.com" required autofocus>
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
@@ -54,7 +47,5 @@
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -3,15 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Đăng ký tài khoản</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #f4f6f9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
         .register-box {
             max-width: 460px;
             margin: 40px auto;
@@ -29,8 +22,6 @@
     </style>
 </head>
 <body>
-    <jsp:include page="topbar.jsp" />
-
     <div class="container">
         <div class="register-box">
             <h2>Tạo tài khoản</h2>
@@ -41,30 +32,43 @@
                 </div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/register" method="post">
+            <form action="${pageContext.request.contextPath}/register" method="post" class="needs-validation" novalidate>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Tên tài khoản <span class="text-danger">*</span></label>
-                    <input type="text" name="username" class="form-control" placeholder="Tên đăng nhập" required autofocus>
+                    <input type="text" name="username" class="form-control"
+                           value="${inputUsername}"
+                           pattern="^[a-zA-Z0-9_.-]{3,50}$"
+                           placeholder="Tên đăng nhập (3–50 ký tự)" required autofocus>
+                    <div class="invalid-feedback">Tên tài khoản 3–50 ký tự, chỉ gồm chữ cái, số và _, ., -.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Mật khẩu <span class="text-danger">*</span></label>
-                    <input type="password" name="password" class="form-control" placeholder="Mật khẩu" required>
+                    <input type="password" name="password" class="form-control"
+                           minlength="6" placeholder="Ít nhất 6 ký tự" required>
+                    <div class="invalid-feedback">Mật khẩu phải có ít nhất 6 ký tự.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="form-control" placeholder="example@gmail.com" required>
+                    <input type="email" name="email" class="form-control"
+                           value="${inputEmail}" placeholder="example@gmail.com" required>
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Họ và tên</label>
-                    <input type="text" name="fullname" class="form-control" placeholder="Họ và tên đầy đủ">
+                    <input type="text" name="fullname" class="form-control"
+                           value="${inputFullname}" maxlength="100" placeholder="Họ và tên đầy đủ">
+                    <div class="invalid-feedback">Họ và tên tối đa 100 ký tự.</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Số điện thoại</label>
-                    <input type="text" name="phone" class="form-control" placeholder="Số điện thoại">
+                    <input type="text" name="phone" class="form-control"
+                           value="${inputPhone}"
+                           pattern="^(0|\+84)[0-9]{9,10}$" placeholder="0901234567">
+                    <div class="invalid-feedback">Số điện thoại không hợp lệ (ví dụ: 0901234567).</div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">
@@ -78,7 +82,5 @@
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
