@@ -119,6 +119,14 @@ public class LoginWithCookie2Application extends SpringBootServletInitializer {
     }
 
     @Bean
+    public ServletRegistrationBean<ProfileController> profileServletRegistration() {
+        ServletRegistrationBean<ProfileController> reg = new ServletRegistrationBean<>(new ProfileController(), "/profile", "/profile/verify-email");
+        reg.setLoadOnStartup(1);
+        reg.setMultipartConfig(new MultipartConfigElement("uploads", 1024 * 1024 * 10, 1024 * 1024 * 20, 1024 * 1024 * 2));
+        return reg;
+    }
+
+    @Bean
     public FilterRegistrationBean<SiteMeshFilter> siteMeshFilterRegistration() {
         FilterRegistrationBean<SiteMeshFilter> filter = new FilterRegistrationBean<>();
         filter.setFilter(new SiteMeshFilter());

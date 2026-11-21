@@ -63,6 +63,24 @@ public class EmailUtil {
         return sendEmail(toEmail, subject, htmlContent, otp, "ĐẶT LẠI MẬT KHẨU");
     }
 
+    /**
+     * Gửi email chứa OTP xác nhận thay đổi địa chỉ email mới
+     */
+    public static boolean sendEmailChangeOtp(String toNewEmail, String username, String otp) {
+        String subject = "Xác nhận thay đổi Email - LoginWithCookie";
+        String htmlContent = "<div style=\"font-family: Arial, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px;\">"
+                + "<h2 style=\"color: #0d6efd; text-align: center;\">Xác Nhận Email Mới</h2>"
+                + "<p>Xin chào <strong>" + username + "</strong>,</p>"
+                + "<p>Bạn vừa yêu cầu cập nhật địa chỉ email mới cho tài khoản của mình. Vui lòng nhập mã xác nhận bên dưới để hoàn tất:</p>"
+                + "<div style=\"background-color: #f8f9fa; border: 1px dashed #0d6efd; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #0d6efd; margin: 20px 0;\">"
+                + otp
+                + "</div>"
+                + "<p style=\"color: #6c757d; font-size: 13px;\">Mã OTP có hiệu lực trong vòng <strong>10 phút</strong>.</p>"
+                + "</div>";
+
+        return sendEmail(toNewEmail, subject, htmlContent, otp, "XÁC NHẬN ĐỔI EMAIL");
+    }
+
     private static boolean sendEmail(String toEmail, String subject, String htmlContent, String otpForLog, String purpose) {
         String host = EnvConfig.get("MAIL_HOST", "smtp.gmail.com");
         int port = EnvConfig.getInt("MAIL_PORT", 587);

@@ -16,5 +16,6 @@ public class Constant {
         public static final String VIDEO = "/views/video.jsp";
         public static final String VIDEO_DETAIL = "/views/video-detail.jsp";
         public static final String VIDEO_MANAGE = "/views/video-manage.jsp";
+        public static final String PROFILE = "/views/profile.jsp";
     }
 }

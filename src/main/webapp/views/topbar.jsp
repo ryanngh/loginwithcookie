@@ -41,10 +41,21 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <div class="user-links d-flex align-items-center gap-3">
-                            <span class="badge bg-secondary p-2">
-                                <i class="fa fa-user-circle"></i> ${sessionScope.account.fullName != null && !sessionScope.account.fullName.isEmpty() ? sessionScope.account.fullName : sessionScope.account.userName}
-                            </span>
+                        <div class="user-links d-flex align-items-center gap-2">
+                            <a href="${pageContext.request.contextPath}/profile"
+                               class="btn btn-outline-light btn-sm d-flex align-items-center gap-2"
+                               title="Hồ sơ cá nhân">
+                                <c:choose>
+                                    <c:when test="${sessionScope.account.avatar != null && !sessionScope.account.avatar.isEmpty()}">
+                                        <img src="${sessionScope.account.avatar}" alt="Avatar"
+                                             style="width: 22px; height: 22px; border-radius: 50%; object-fit: cover;">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <i class="fa fa-user-circle"></i>
+                                    </c:otherwise>
+                                </c:choose>
+                                <span>${sessionScope.account.fullName != null && !sessionScope.account.fullName.isEmpty() ? sessionScope.account.fullName : sessionScope.account.userName}</span>
+                            </a>
                             <a href="${pageContext.request.contextPath}/logout" class="btn btn-outline-danger btn-sm">
                                 <i class="fa fa-sign-out-alt"></i> Đăng xuất
                             </a>
